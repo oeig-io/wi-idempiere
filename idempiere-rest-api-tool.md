@@ -4,25 +4,73 @@ The purpose of this document is to provide working patterns for the iDempiere RE
 
 ## Authentication
 
-Two-step process: get token, then select context.
+Two-step process: get token, then select context. The credentials and role depend on which client you need.
+
+### Client-Level Calls
+
+For operations on tenant data (orders, invoices, business partners):
 
 ```bash
 API_URL="http://localhost:8080/api/v1"
 
-# Step 1: Authenticate
+# Step 1: Authenticate as tenant admin
 AUTH_RESPONSE=$(curl -s -X POST "${API_URL}/auth/tokens" \
     -H "Content-Type: application/json" \
-    -d "{\"userName\":\"${USER}\",\"password\":\"${PASSWORD}\"}")
+    -d "{\"userName\":\"${ADMIN_USER}\",\"password\":\"${ADMIN_PASSWORD}\"}")
 
 TOKEN=$(echo "$AUTH_RESPONSE" | grep -o '"token":"[^"]*"' | head -1 | cut -d'"' -f4)
 
-# Step 2: Select context
+# Step 2: Select client context
 SESSION_RESPONSE=$(curl -s -X PUT "${API_URL}/auth/tokens" \
     -H "Content-Type: application/json" \
     -H "Authorization: Bearer $TOKEN" \
     -d "{\"clientId\":${CLIENT_ID},\"roleId\":${ROLE_ID},\"organizationId\":${ORG_ID},\"warehouseId\":${WH_ID}}")
 
 SESSION_TOKEN=$(echo "$SESSION_RESPONSE" | grep -o '"token":"[^"]*"' | head -1 | cut -d'"' -f4)
+```
+
+### System-Level Calls
+
+For operations on system/dictionary data (PackOut, native sequences, application dictionary). Three things differ from client calls:
+
+1. **User**: `SuperUser` / `System`
+2. **Role**: `System API Access` (not `System Administrator` — role ID 0 returns `Invalid roleId`)
+3. **Process access**: The System API Access role needs explicit `ad_process_access` grants for each process
+
+```bash
+API_URL="http://localhost:8080/api/v1"
+ROLE_ID=$(psqli -t -A -c "SELECT ad_role_id FROM ad_role WHERE name = 'System API Access';")
+
+# Step 1: Authenticate as SuperUser
+AUTH_RESPONSE=$(curl -s -X POST "${API_URL}/auth/tokens" \
+    -H "Content-Type: application/json" \
+    -d '{"userName":"SuperUser","password":"System"}')
+
+TOKEN=$(echo "$AUTH_RESPONSE" | grep -o '"token":"[^"]*"' | head -1 | cut -d'"' -f4)
+
+# Step 2: Select System client
+SESSION_RESPONSE=$(curl -s -X PUT "${API_URL}/auth/tokens" \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer $TOKEN" \
+    -d "{\"clientId\":0,\"roleId\":${ROLE_ID},\"organizationId\":0,\"warehouseId\":0}")
+
+SESSION_TOKEN=$(echo "$SESSION_RESPONSE" | grep -o '"token":"[^"]*"' | head -1 | cut -d'"' -f4)
+```
+
+### Granting Process Access to System API Access Role
+
+Before calling a process via system-level API, grant access (idempotent):
+
+```sql
+INSERT INTO ad_process_access (ad_process_id, ad_role_id, ad_client_id, ad_org_id, isactive,
+    created, createdby, updated, updatedby, isreadwrite, ad_process_access_uu)
+SELECT v_process_id, ad_role_id, 0, 0, 'Y', now(), 100, now(), 100, 'Y', uuid_generate_v4()::varchar
+FROM ad_role WHERE name = 'System API Access'
+AND NOT EXISTS (
+    SELECT 1 FROM ad_process_access pa
+    JOIN ad_role r ON pa.ad_role_id = r.ad_role_id
+    WHERE pa.ad_process_id = v_process_id AND r.name = 'System API Access'
+);
 ```
 
 ## Common ID Lookups
