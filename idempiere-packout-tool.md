@@ -1,8 +1,20 @@
 # iDempiere PackOut Tool
 
-The purpose of this document is to provide patterns for creating PackOut (2Pack) export records in iDempiere.
+The purpose of this document is to provide the workflow and reference for creating PackOut (2Pack) export records in iDempiere.
 
-This is important because PackOut produces portable XML packages that can be imported into other environments, avoiding manual SQL scripts for dictionary-level artifacts.
+PackOut produces portable XML packages that can be imported into other environments, avoiding manual SQL scripts for dictionary-level artifacts.
+
+## Workflow
+
+PackOut records are created interactively in the iDempiere UI, not via SQL scripts. The workflow is:
+
+1. **Create the PackOut record** in iDempiere (window: Pack Out - Create)
+2. **Export via REST API** to produce a zip file
+3. **Add the zip to `deploy/`** in idempiere-golive-deploy
+
+The zip is the only migration artifact. No SQL scripts are created for PackOut records.
+
+Because the PackOut includes a self-referencing detail line, the PackOut definition itself is carried to the target environment. This means future modifications are made interactively in either environment, and the target can re-export the same PackOut without recreating it.
 
 ## When to Use PackOut
 
@@ -10,7 +22,11 @@ Use PackOut for artifacts stored in AD tables (print formats, print paper, table
 
 Avoid the PFT (PrintFormat) detail type. It recursively exports the full table definition (AD_Table, AD_Element, translations) for any table referenced by the print format, producing excessive output. Use Data type instead.
 
-## AD_Package_Exp
+## Interactive Reference
+
+The SQL below is not used as migration scripts. It serves as a reference for the column names, values, and patterns to use when creating PackOut records interactively in the iDempiere UI.
+
+### AD_Package_Exp
 
 The export package header.
 
@@ -41,11 +57,11 @@ INSERT INTO ad_package_exp (
 );
 ```
 
-## AD_Package_Exp_Detail
+### AD_Package_Exp_Detail
 
 Each detail line defines one export artifact.
 
-### Detail Types
+#### Detail Types
 
 | Type | Name | Use For |
 |------|------|---------|
@@ -56,7 +72,7 @@ Each detail line defines one export artifact.
 | P | Process/Report | Process definitions |
 | T | Table | Table definitions |
 
-### Data Type Detail
+#### Data Type Detail
 
 The Data type uses a `sqlstatement` containing a full SELECT query. Use UUIDs in WHERE clauses since record IDs change across environments.
 
@@ -79,7 +95,7 @@ INSERT INTO ad_package_exp_detail (
 );
 ```
 
-### Semicolon Syntax for Child Records
+#### Semicolon Syntax for Child Records
 
 Append `; ChildTableName` to the sqlstatement to automatically export child records. The child table must have a column named `ParentTableName_ID` matching the parent.
 
@@ -98,7 +114,7 @@ Multiple child chains and deeper hierarchies use additional semicolons and `>`:
 'SELECT * FROM C_Order WHERE C_Order_UU = ''uuid-here''; C_OrderLine > C_OrderLineTax'
 ```
 
-## Line Ordering
+### Line Ordering
 
 Dependencies must be exported before the records that reference them. Order lines so that supporting records come first.
 
@@ -111,7 +127,7 @@ Example for print format artifacts:
 | 30 | AD_PrintFormat + items | References paper and table format |
 | 40 | AD_Package_Exp + details | Self-referencing (for future re-export) |
 
-## Self-Referencing PackOut
+### Self-Referencing PackOut
 
 Include the PackOut record itself as the last detail line. This ensures the PackOut definition is available in target environments for future re-exports.
 
