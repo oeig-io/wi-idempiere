@@ -29,5 +29,6 @@ Work instructions for planning and executing iDempiere changes.
 - [idempiere-pull-request-tool.md](idempiere-pull-request-tool.md) - checklist and workflow for submitting PRs to iDempiere core
 - [idempiere-packout-tool.md](idempiere-packout-tool.md) - PackOut (2Pack) export records for portable artifact packaging
 - [idempiere-rest-api-tool.md](idempiere-rest-api-tool.md) - REST API patterns for authentication, CRUD, processes
+- [idempiere-language-tool.md](idempiere-language-tool.md) - manage UI languages and auto-populate translation (_trl) records (Language Maintenance); fix gaps that break Copy Tab Fields
 - [postgresql-logging-tool.md](postgresql-logging-tool.md) - PostgreSQL query logging for debugging iDempiere
 - [ssh-remote-connection-tool.md](ssh-remote-connection-tool.md) - SSH key creation and remote access
