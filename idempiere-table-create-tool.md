@@ -92,7 +92,7 @@ curl -s -X POST "${API_URL}/processes/createtable" \
     }"
 ```
 
-> **📝 Note** - See Alternative: CopyColumnsFromTable Process section for an alternative approach that copies columns from an existing table instead of creating them from flags.
+> **📝 Note** - Control exactly which standard columns exist by toggling the flags. For link tables (subtabs), set `IsCreateColName` and `IsCreateColValue` to `N` so Name and Value are never created — see [Link Tables](#link-tables). This is the only supported way to build standard columns; never copy them from another table (e.g. `C_Calendar`) only to drop the unwanted ones later.
 
 ## Step 4: Add Additional Custom Columns
 
@@ -162,11 +162,14 @@ The purpose of this section is to describe how to create link tables in iDempier
 
 | Requirement | Description |
 |-------------|-------------|
-| Primary key | REQUIRED - created by Create/Complete Table or CopyColumnsFromTable |
+| Primary key | REQUIRED - created by Create/Complete Table |
 | UUID column | REQUIRED - included in standard column creation |
-| Name field | OMIT - use Description instead (no standalone window) |
+| Name field | OMIT - set `IsCreateColName='N'`; use Description instead (no standalone window) |
+| Value field | OMIT - set `IsCreateColValue='N'` (no standalone window) |
 | FK columns | Add via SQL after standard columns are created, before sync |
 | Standalone window | NO - added as subtab to parent window |
+
+> 💡 **Tip** - Omit Name and Value by running the Create/Complete Table process with `IsCreateColName='N'` and `IsCreateColValue='N'`. This creates exactly the columns a link table needs — never create Name/Value (or copy them from `C_Calendar`) only to drop them afterward.
 
 ### Example: Product Price Subtab
 
@@ -184,7 +187,7 @@ The Product window => Price subtab demonstrates the link table pattern:
 
 1. Create AD_Elements for any custom FK columns
 2. Create table record (no columns yet)
-3. Run Create/Complete Table process (or CopyColumnsFromTable for link tables that omit Name/Value)
+3. Run Create/Complete Table process with `IsCreateColName='N'` and `IsCreateColValue='N'` (link tables omit Name and Value)
 4. Add FK columns to parent tables via SQL
 5. Sync database once at end
 6. Add as subtab (not standalone window), then run the Create Fields process (`AD_Tab_CreateFields`) to generate field records
@@ -192,36 +195,5 @@ The Product window => Price subtab demonstrates the link table pattern:
 > **⚠️ Warning** - Use the Create Fields process rather than hand-crafting `AD_Field` rows. A subtab missing field records for the key column, parent link column, `AD_Client_ID`, or `AD_Org_ID` fails to save with a misleading "Changes ignored" message and persists no record. See Required Fields for Editable Tabs in [idempiere-window-tool.md](idempiere-window-tool.md).
 
 > **📝 Note** - See Product window => Price subtab in Application Dictionary for live example.
-
-## Alternative: CopyColumnsFromTable Process
-
-The purpose of this section is to document the CopyColumnsFromTable process as an alternative to the Create/Complete Table process.
-
-This is important because CopyColumnsFromTable copies columns from an existing source table, which can be useful for link tables or when you need to match the column structure of an existing table.
-
-**Process slug:** `ad_table_copycolumnsfromtable`
-
-**When to consider:**
-- Link tables that need a subset of standard columns (e.g., omit Name/Value)
-- Tables that should mirror the column structure of an existing table
-
-**Requirements:**
-- Target table must have NO columns (fresh AD_Table record only)
-- Process automatically creates AD_Elements for the primary key and UUID columns if they don't exist
-- All copied columns inherit the target table's EntityType
-
-```bash
-# Get source table ID (C_Calendar is a common source for standard columns)
-SOURCE_TABLE_ID=$(psqli -t -A -c "SELECT ad_table_id FROM ad_table WHERE tablename = 'C_Calendar';")
-
-curl -s -X POST "${API_URL}/processes/ad_table_copycolumnsfromtable" \
-    -H "Content-Type: application/json" \
-    -H "Authorization: Bearer $SESSION_TOKEN" \
-    -d "{
-        \"model-name\": \"ad_table\",
-        \"record-id\": ${TABLE_ID},
-        \"AD_Table_ID\": ${SOURCE_TABLE_ID}
-    }"
-```
 
 Tags: #tool #idempiere #application-dictionary #table-create
