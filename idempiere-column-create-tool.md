@@ -47,6 +47,8 @@ The purpose of this document is to describe how to add columns to existing table
 | 22 | Number | Decimals | Number field | 22 |
 | 29 | Quantity | Quantities | Number field | 22 |
 | 30 | **Search** | Popup with filter - for high-volume tables | Popup dialog | 10 |
+| 200202 | **Record ID** | Polymorphic pointer to an **integer-keyed** row (pairs with `AD_Table_ID`) | Read-only text + edit/zoom buttons | 22 |
+| 200240 | **Record UUID** | Polymorphic pointer to a **UUID-keyed** row (pairs with `AD_Table_ID`) | Read-only text + edit/zoom buttons | 36 |
 
 ### Foreign Key Reference Types (Table, Table Direct, Search)
 
@@ -158,6 +160,19 @@ AD_Reference_Value_ID = NULL  -- Not needed if column = M_Product_ID
 **UI Behavior:**
 - **Table/Table Direct (18/19):** Shows dropdown list immediately
 - **Search (30):** Shows text field with lookup button → opens popup with filter grid
+
+### Record ID / Record UUID References (Polymorphic Record Pointer)
+
+The purpose of the Record ID (`200202`) and Record UUID (`200240`) references is to point a column at *any* row in *any* table, not one fixed table.
+
+This is important because it lets one record reference an arbitrary target — the pattern behind stock `R_Request` (Request window), where `AD_Table_ID` names the table and `Record_ID` / `Record_UU` identify that row.
+
+- **Always pair with a sibling `AD_Table_ID` field** on the same tab. The editor calls `gridTab.getField("AD_Table_ID")` and throws `"AD_Table_ID field not found"` at construction if it is missing.
+- **UI behavior:** iDempiere renders the field as a composite editor (`WRecordIDEditor` / `WRecordUUIDEditor`) — a read-only textbox plus **edit** and **zoom** toolbar buttons — not a plain input.
+
+> 📝 **Note** — **Record ID vs. Record UUID.** Both are polymorphic pointers, but they address the target row two different ways. `Record_ID` (200202) stores the target's **integer** primary key (NUMERIC), zooms via `AEnv.zoom(AD_Table_ID, Record_ID)`, and requires an integer-keyed target (`isIDKeyTable()` — UUID-key or keyless tables are rejected). `Record_UU` (200240) stores the target's **UUID** string (VARCHAR(36)), zooms via `AEnv.zoomUU(AD_Table_ID, Record_UU)`, and requires a UUID-keyed target (`hasUUIDKey()`). iDempiere added `Record_UU` alongside `Record_ID` (e.g. on `R_Request`) as it moved toward UUID keys, so a pointer can reference newer UUID-keyed tables that lack a single integer PK. Choose the reference that matches the target table's key type.
+
+> 🔗 **Reference:** For a worked use case — adding a zoom button to a subtab whose table is the primary tab of another window — see "Zoom to Home Window from an Embedded Subtab" in [idempiere-window-tool.md](idempiere-window-tool.md).
 
 ### Common Reference Keys
 

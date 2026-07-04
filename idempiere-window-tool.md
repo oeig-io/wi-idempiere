@@ -181,6 +181,28 @@ UPDATE ad_field SET seqno = 920, xposition = 1, columnspan = 2 WHERE ad_field_id
 
 > 📝 **Note:** Grid and detail layouts are independent. Changing one does not affect the other.
 
+## Zoom to Home Window from an Embedded Subtab
+
+The purpose of this pattern is to give users a working zoom from a subtab whose table is the **primary** tab of a different window.
+
+This is important because iDempiere's normal zoom works off a foreign-key field's lookup. When the subtab record *is* that table — e.g. `C_Invoice` embedded as a subtab under Business Partner Info, while `C_Invoice` is the primary tab of the Sales Invoice window — there is no field to zoom across, so the user is stranded in the cramped subtab with no way to open the full document.
+
+The fix is to add a **Record ID pointer field** that renders an edit/zoom button. It needs two fields on the subtab, both defined as **virtual DB columns** (plain `ColumnSQL`, no `@SQL=`) so their values load with the tab query:
+
+| Column | Reference | ColumnSQL | Purpose |
+|--------|-----------|-----------|---------|
+| `AD_Table_ID` | Integer (11) | the embedded table's `AD_Table_ID` (e.g. `318` for `C_Invoice`) | Sibling the editor reads for the target table |
+| `OEIG_ZoomRecord_ID` | Record ID (200202) | the row's own key column (e.g. `C_Invoice.C_Invoice_ID`) | Renders the edit/zoom buttons |
+
+- The editor pairs with its sibling **by column name**, so it must be named exactly `AD_Table_ID` — otherwise it throws `"AD_Table_ID field not found"`. The editor only reads that field's integer value, so **Integer (11)** is the lightest reference (no lookup); Search (30) or Table Direct (19) also work if you want it to display the table name instead of the raw id.
+- **Keep the `AD_Table_ID` sibling hidden** (`IsDisplayed='N'` and `IsDisplayedGrid='N'`). The editor finds it by column name whether or not it is shown, so users never need to see the raw target-table id — only the zoom button matters.
+- **Standardize on the column name `OEIG_ZoomRecord_ID`** with its `AD_Element` name (label) set to **`Zoom to Record`**. Reusing one shared column and element — only its `ColumnSQL` changes per tab (the row's own key column) — keeps the affordance consistent and avoids accidentally creating divergent copies of the same field.
+- For a **UUID-keyed** target, use the **Record UUID** reference (200240) with the row's `TableName.TableName_UU` column instead.
+- Clicking zoom calls `AEnv.zoom(AD_Table_ID, key)`, which resolves the target table's own primary window (the SO vs. PO variant is chosen per `IsSOTrx`) and filters to that record.
+- **Core-table ids are stable** — hardcoding `AD_Table_ID` (e.g. `318` for `C_Invoice`) is safe. For **tables you create**, the id is assigned per instance, so the deploy script must look it up and substitute it into the `ColumnSQL`: `SELECT ad_table_id FROM ad_table WHERE tablename='...'`.
+
+> 🔗 **Reference:** The Record ID / Record UUID editor mechanics, the `AD_Table_ID` sibling requirement, and the integer-vs-UUID key rules are documented under "Record ID / Record UUID References" in [idempiere-column-create-tool.md](idempiere-column-create-tool.md), which also covers virtual DB columns (plain `ColumnSQL`).
+
 ## SQL Patterns
 
 ### Query Current Field Layout
