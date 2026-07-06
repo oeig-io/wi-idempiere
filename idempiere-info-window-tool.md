@@ -23,7 +23,7 @@ To add process buttons to an Info Window, see [idempiere-process-tool.md](idempi
 |--------|-------|-------|
 | ad_table_id | Table ID | Base table for the window |
 | fromclause | Join expression | No SELECT, no WHERE |
-| orderbyclause | Column seqno | References AD_InfoColumn.seqno |
+| orderbyclause | Ordinals or SQL | SELECT-list positions (e.g. `2,3,4`) **or** a SQL expression (e.g. `t.DateTrx`, `bp.Value`) |
 
 ```sql
 INSERT INTO ad_infowindow (
@@ -40,7 +40,7 @@ INSERT INTO ad_infowindow (
     E'M_Product p
 LEFT OUTER JOIN M_ProductPrice pr ON (p.M_Product_ID=pr.M_Product_ID AND pr.IsActive=''Y'')
 LEFT OUTER JOIN M_AttributeSet pa ON (p.M_AttributeSet_ID=pa.M_AttributeSet_ID)',
-    'N', uuid_generate_v4(), 'N', 'N',
+    'N', generate_uuid(), 'N', 'N',
     '1',  -- references seqno of sort column
     'Y', 'N', 0, 'Y', 0
 );
@@ -79,6 +79,30 @@ LEFT OUTER JOIN M_AttributeSetInstance pasi ON (p.M_AttributeSetInstance_ID=pasi
 
 ## AD_InfoColumn
 
+### Key Column
+
+Define exactly one hidden key column so the framework can map each result row back to its record. This is what fills `T_Selection` (`T_Selection_ID`) when an Info Window process runs against the multi-selected rows — omit it and selection-driven processes receive wrong or missing IDs. Standard Info Windows do this (e.g. `C_DepositBatch_ID` on Payment Into Batch Info).
+
+Use the base table's key column with `iskey='Y'`, `isdisplayed='N'`:
+
+```sql
+INSERT INTO ad_infocolumn (
+    ad_infocolumn_id, ad_client_id, ad_org_id, isactive, created, createdby,
+    updated, updatedby, name, ad_infowindow_id, ad_element_id, ad_reference_id,
+    selectclause, seqno, isqueryafterchange, isidentifier, isdisplayed, isquerycriteria,
+    ad_infocolumn_uu, entitytype, columnname, iscentrallymaintained, ismandatory,
+    isreadonly, isautocomplete, isrange, iskey
+) VALUES (
+    nextval('ad_infocolumn_sq'), 0, 0, 'Y', now(), 100, now(), 100,
+    'Timesheet', v_infowindow_id, 1000067, 13,   -- ad_element_id, 13=ID reference
+    't.oeig_timesheet_id', 0, 'N', 'N',
+    'N',  -- isdisplayed=N (hidden)
+    'N',  -- isquerycriteria=N
+    generate_uuid(), 'U', 'OEIG_Timesheet_ID', 'N', 'N', 'Y', 'N', 'N',
+    'Y'   -- iskey=Y
+);
+```
+
 ### Displayed Column
 
 ```sql
@@ -99,7 +123,7 @@ INSERT INTO ad_infocolumn (
     'N', 'N',
     'Y',  -- isdisplayed
     'N',  -- isquerycriteria
-    uuid_generate_v4(), 'U', 'ColumnName', 'Y', 'N', 'Y', 'N', 'N'
+    generate_uuid(), 'U', 'ColumnName', 'Y', 'N', 'Y', 'N', 'N'
 );
 ```
 
@@ -126,7 +150,7 @@ INSERT INTO ad_infocolumn (
     'N', 'N',
     'N',  -- isdisplayed=N (hidden)
     'Y',  -- isquerycriteria=Y (filter)
-    uuid_generate_v4(), 'U', 'C_Order_ID', 'Y', 'N', 'Y', 'N', 'N',
+    generate_uuid(), 'U', 'C_Order_ID', 'Y', 'N', 'Y', 'N', 'N',
     '=',
     '@C_Order_ID@'
 );

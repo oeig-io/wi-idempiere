@@ -101,7 +101,7 @@ INSERT INTO ad_package_exp (
     'X', '1.0.0',
     'N', 'N',
     'Y', 'N',
-    uuid_generate_v4()
+    generate_uuid()
 );
 ```
 
@@ -142,7 +142,7 @@ INSERT INTO ad_package_exp_detail (
     'D', 10, 'N', 'N',
     492,  -- ad_table_id for the target table
     'SELECT * FROM AD_PrintPaper WHERE AD_PrintPaper_UU = ''uuid-here''',
-    uuid_generate_v4()
+    generate_uuid()
 );
 ```
 
@@ -198,7 +198,7 @@ VALUES (
     'D', 999, 'N', 'N',  -- High line number (last)
     50005,  -- AD_Package_Exp table
     'SELECT * FROM AD_Package_Exp WHERE AD_Package_Exp_UU = ''your-uuid-here''; AD_Package_Exp_Detail',
-    uuid_generate_v4()
+    generate_uuid()
 );
 ```
 
@@ -296,10 +296,10 @@ INSERT INTO ad_window_access (
     isreadwrite, created, createdby, updated, updatedby, ad_window_access_uu
 ) VALUES 
 -- Example: Grant Vendor window access to Purchasing roles
-(1000011, 1000011, 1000000, 0, 'Y', 'Y', now(), 100, now(), 100, gen_random_uuid()), -- Purchasing Admin
-(1000011, 1000010, 1000000, 0, 'Y', 'Y', now(), 100, now(), 100, gen_random_uuid()), -- Purchasing User
-(1000011, 1000009, 1000000, 0, 'Y', 'Y', now(), 100, now(), 100, gen_random_uuid()), -- Accounting Admin
-(1000011, 1000008, 1000000, 0, 'Y', 'Y', now(), 100, now(), 100, gen_random_uuid())  -- Accounting User
+(1000011, 1000011, 1000000, 0, 'Y', 'Y', now(), 100, now(), 100, generate_uuid()), -- Purchasing Admin
+(1000011, 1000010, 1000000, 0, 'Y', 'Y', now(), 100, now(), 100, generate_uuid()), -- Purchasing User
+(1000011, 1000009, 1000000, 0, 'Y', 'Y', now(), 100, now(), 100, generate_uuid()), -- Accounting Admin
+(1000011, 1000008, 1000000, 0, 'Y', 'Y', now(), 100, now(), 100, generate_uuid())  -- Accounting User
 ON CONFLICT (ad_window_id, ad_role_id) DO UPDATE SET
     isactive = 'Y',
     isreadwrite = 'Y',

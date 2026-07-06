@@ -118,7 +118,7 @@ INSERT INTO c_validcombination (
     now(), 100, now(), 100,
     1000000, (SELECT c_elementvalue_id FROM c_elementvalue WHERE value = '54000'),
     '*-54000-_-_-_-_-_', '*-Freight in-_-_-_-_-_', 'Y',
-    gen_random_uuid()
+    generate_uuid()
 );
 ```
 

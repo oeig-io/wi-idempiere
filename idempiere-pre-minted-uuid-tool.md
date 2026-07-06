@@ -13,7 +13,7 @@ metadata:
 
 The purpose of this document is to describe the pattern for pre-minting UUIDs at authoring time so that entities created by one script can be reliably referenced by other scripts.
 
-This is important because every iDempiere table has a `_uu` column with a unique index. When scripts use `uuid_generate_v4()` at runtime, each deployment produces different UUIDs — making cross-script references impossible without fragile name-based lookups.
+This is important because every iDempiere table has a `_uu` column with a unique index. When scripts use `generate_uuid()` at runtime, each deployment produces different UUIDs — making cross-script references impossible without fragile name-based lookups.
 
 ## TOC
 
@@ -49,7 +49,7 @@ Three steps: **mint**, **assign**, **use**.
 Query the database for valid UUIDs before writing the script:
 
 ```sql
-SELECT uuid_generate_v4() FROM generate_series(1, 10);
+SELECT generate_uuid() FROM generate_series(1, 10);
 ```
 
 ### Step 2: Assign
@@ -110,7 +110,7 @@ The creating script is the **source of truth**. Place the registry in a comment 
 | Scenario | UUID Strategy |
 |----------|--------------|
 | Entity referenced by another script (Groovy, SQL) | **Pre-mint** |
-| Entity referenced only within the same script | `uuid_generate_v4()` is fine |
-| Junction/leaf records (m_attributeuse, ad_process_access) | `uuid_generate_v4()` is fine |
+| Entity referenced only within the same script | `generate_uuid()` is fine |
+| Junction/leaf records (m_attributeuse, ad_process_access) | `generate_uuid()` is fine |
 
 Tags: #tool #idempiere #uuid #deploy-pattern

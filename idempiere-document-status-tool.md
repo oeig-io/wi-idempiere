@@ -93,7 +93,7 @@ INSERT INTO pa_documentstatus (
     100,
     'N',
     'U',
-    uuid_generate_v4()
+    generate_uuid()
 );
 ```
 
@@ -168,7 +168,7 @@ INSERT INTO pa_documentstatusaccess (
     (SELECT pa_documentstatus_id FROM pa_documentstatus WHERE name = 'Draft Sales Orders' AND ad_client_id = 11),
     (SELECT ad_role_id FROM ad_role WHERE name = 'ACME Admin' AND ad_client_id = 11),
     0,  -- Any user with this role
-    uuid_generate_v4()
+    generate_uuid()
 );
 ```
 
@@ -224,7 +224,7 @@ BEGIN
         200,
         'Y',  -- Hide when zero
         'U',
-        uuid_generate_v4()
+        generate_uuid()
     ) RETURNING pa_documentstatus_id INTO v_docstatus_id;
 
     -- Step 2: Restrict to purchasing role (optional)
@@ -239,7 +239,7 @@ BEGIN
         v_docstatus_id,
         (SELECT ad_role_id FROM ad_role WHERE name = 'ACME Purchasing' AND ad_client_id = 11),
         0,
-        uuid_generate_v4()
+        generate_uuid()
     );
 END $$;
 ```

@@ -82,7 +82,7 @@ INSERT INTO ad_rule (
     'Calculates QtyOrdered from QtyEntered and UOM conversion',
     'T', 'S',
     E'// Script content here - see examples below',
-    'U', uuid_generate_v4(), '3'
+    'U', generate_uuid(), '3'
 );
 ```
 
@@ -103,7 +103,7 @@ INSERT INTO ad_table_scriptvalidator (
     (SELECT ad_rule_id FROM ad_rule WHERE value = 'groovy:OrderLineUOMConversion'),
     'TBN',  -- Table Before New
     10,
-    uuid_generate_v4()
+    generate_uuid()
 );
 
 -- Also register for updates
@@ -119,7 +119,7 @@ INSERT INTO ad_table_scriptvalidator (
     (SELECT ad_rule_id FROM ad_rule WHERE value = 'groovy:OrderLineUOMConversion'),
     'TBC',  -- Table Before Change
     10,
-    uuid_generate_v4()
+    generate_uuid()
 );
 ```
 
@@ -218,6 +218,8 @@ return ""
 ```
 
 ## Testing
+
+> ⚠️ **Warning** - New or changed `AD_Table_ScriptValidator` registrations do not fire until the model-validation engine reloads. Reset the cache (System Admin => Cache Reset) or restart the server before testing — otherwise the validator silently does nothing.
 
 After creating the rule and validator:
 

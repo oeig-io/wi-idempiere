@@ -41,7 +41,7 @@ INSERT INTO ad_rule (
     'Description',
     'P', 'S',
     'return "Success message"',
-    'U', uuid_generate_v4(), '3'
+    'U', generate_uuid(), '3'
 );
 ```
 
@@ -69,7 +69,37 @@ INSERT INTO ad_process (
     '3', 'U', 'N', 'N',
     'Y',
     '@script:groovy:ScriptName',
-    uuid_generate_v4()
+    generate_uuid()
+);
+```
+
+## AD_Process_Para
+
+Adds a runtime parameter (shown in the dialog before execution). One row per parameter; Groovy reads each as `P_<ColumnName>`.
+
+| Column | Value | Notes |
+|--------|-------|-------|
+| ad_process_id | process ID | Owning process |
+| columnname | e.g. `R_Status_ID` | Exposed to Groovy as `P_<ColumnName>` |
+| ad_reference_id | e.g. 19 | Same reference types as AD_Column (Table Direct, List, Search, ...) |
+| ad_reference_value_id | reference/list ID | Only when the reference needs one |
+| ad_val_rule_id | val rule ID | Optional dynamic filter (see idempiere-column-create, Dynamic Validation) |
+| ismandatory | 'Y'/'N' | Require a value before running |
+| isrange | 'Y'/'N' | 'Y' exposes `P_<ColumnName>` and `P_<ColumnName>_To` |
+
+```sql
+INSERT INTO ad_process_para (
+    ad_process_para_id, ad_client_id, ad_org_id, isactive, created, createdby,
+    updated, updatedby, name, ad_process_id, seqno,
+    ad_reference_id, ad_val_rule_id, ad_element_id, columnname,
+    fieldlength, ismandatory, isrange, iscentrallymaintained,
+    entitytype, ad_process_para_uu
+) VALUES (
+    nextval('ad_process_para_sq'), 0, 0, 'Y', now(), 100, now(), 100,
+    'Status', (SELECT ad_process_id FROM ad_process WHERE value = 'ScriptName'), 10,
+    19, (SELECT ad_val_rule_id FROM ad_val_rule WHERE name = 'Rule Name'), 2706, 'R_Status_ID',
+    10, 'Y', 'N', 'Y',
+    'U', generate_uuid()
 );
 ```
 
@@ -109,7 +139,7 @@ INSERT INTO ad_infoprocess (
     (SELECT ad_process_id FROM ad_process WHERE value = 'ScriptName'),
     10,
     'B',  -- Button
-    'U', uuid_generate_v4()
+    'U', generate_uuid()
 );
 ```
 

@@ -106,7 +106,7 @@ INSERT INTO c_bpartner (
     '${BP_VALUE}', '${BP_NAME}',
     (SELECT c_bp_group_id FROM c_bp_group WHERE name = 'Standard' AND ad_client_id = ${CLIENT_ID}),
     '${IS_EMPLOYEE}', '${IS_CUSTOMER}', '${IS_VENDOR}',
-    uuid_generate_v4(), now(), 100, now(), 100
+    generate_uuid(), now(), 100, now(), 100
 );
 
 -- 2. Create Contact (no login)
@@ -117,7 +117,7 @@ INSERT INTO ad_user (
 ) VALUES (
     nextval('ad_user_sq'), ${CLIENT_ID}, 0, 'Y',
     ${BP_ID}, '${CONTACT_VALUE}', '${CONTACT_NAME}', '${EMAIL}',
-    uuid_generate_v4(), now(), 100, now(), 100
+    generate_uuid(), now(), 100, now(), 100
 );
 ```
 
@@ -165,7 +165,7 @@ INSERT INTO ad_user_roles (
     ad_user_id, ad_role_id, isactive,
     created, createdby, updated, updatedby
 ) VALUES (
-    uuid_generate_v4(), ${CLIENT_ID}, 0,
+    generate_uuid(), ${CLIENT_ID}, 0,
     ${USER_ID}, ${ROLE_ID}, 'Y',
     now(), 100, now(), 100
 );
@@ -224,7 +224,7 @@ INSERT INTO ad_user (
 ) VALUES (
     nextval('ad_user_sq'), ${CLIENT_ID}, 0, 'Y',
     '${USERNAME}', '${FULL_NAME}', '${EMAIL}', '${PASSWORD}',
-    uuid_generate_v4(), now(), 100, now(), 100
+    generate_uuid(), now(), 100, now(), 100
 );
 
 INSERT INTO ad_user_roles (...) VALUES (...);

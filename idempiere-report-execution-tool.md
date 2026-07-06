@@ -277,7 +277,7 @@ The role does not have process access. Grant it:
 INSERT INTO ad_process_access (ad_process_id, ad_role_id, ad_client_id, ad_org_id, isactive,
     created, createdby, updated, updatedby, isreadwrite, ad_process_access_uu)
 SELECT p.ad_process_id, r.ad_role_id, r.ad_client_id, 0, 'Y',
-    now(), 100, now(), 100, 'Y', uuid_generate_v4()
+    now(), 100, now(), 100, 'Y', generate_uuid()
 FROM ad_process p, ad_role r
 WHERE p.value = '[PROCESS_VALUE]' AND r.name = '[ROLE_NAME]'
 AND NOT EXISTS (

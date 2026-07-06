@@ -47,7 +47,7 @@ INSERT INTO m_attribute (
     name, attributevaluetype, isinstanceattribute, ismandatory, m_attribute_uu
 ) VALUES (
     nextval('m_attribute_sq'), v_client_id, 0, 'Y', now(), 100, now(), 100,
-    'Color', 'S', 'Y', 'N', uuid_generate_v4()
+    'Color', 'S', 'Y', 'N', generate_uuid()
 );
 ```
 
@@ -61,7 +61,7 @@ INSERT INTO m_attribute (
     name, attributevaluetype, isinstanceattribute, ismandatory, m_attribute_uu
 ) VALUES (
     nextval('m_attribute_sq'), v_client_id, 0, 'Y', now(), 100, now(), 100,
-    'Length', 'N', 'Y', 'Y', uuid_generate_v4()
+    'Length', 'N', 'Y', 'Y', generate_uuid()
 );
 ```
 
@@ -106,7 +106,7 @@ INSERT INTO m_attribute (
     name, attributevaluetype, isinstanceattribute, ismandatory, m_attribute_uu
 ) VALUES (
     nextval('m_attribute_sq'), v_client_id, 0, 'Y', now(), 100, now(), 100,
-    'Block', 'S', 'Y', 'N', uuid_generate_v4()
+    'Block', 'S', 'Y', 'N', generate_uuid()
 );
 -- isinstanceattribute = 'Y' marks this as an instance attribute
 ```
@@ -123,7 +123,7 @@ INSERT INTO m_attribute (
     name, attributevaluetype, isinstanceattribute, ismandatory, m_attribute_uu
 ) VALUES (
     nextval('m_attribute_sq'), v_client_id, 0, 'Y', now(), 100, now(), 100,
-    'Mat_Finish', 'R', 'N', 'N', uuid_generate_v4()
+    'Mat_Finish', 'R', 'N', 'N', generate_uuid()
 );
 -- isinstanceattribute = 'N' marks this as a product attribute
 ```
@@ -155,7 +155,7 @@ INSERT INTO m_attributeset (
     'Stone Slab', 'Attributes for stone slabs', 'Y',
     'N', 'N', 'N', 'N',
     'N', 'N', 0,
-    'N', uuid_generate_v4()
+    'N', generate_uuid()
 );
 -- m_attributeset_type defaults to MMS
 -- IMPORTANT: Always set islot='N' and isserno='N' unless explicitly requested
@@ -177,7 +177,7 @@ INSERT INTO m_attributeset (
     nextval('m_attributeset_sq'), v_client_id, 0, 'Y', now(), 100, now(), 100,
     'Tile', 'Product attributes for tiles', 'N',
     'N', 'N', 'N', 'N',
-    'TA', uuid_generate_v4()
+    'TA', generate_uuid()
 );
 ```
 
@@ -203,7 +203,7 @@ INSERT INTO m_attribute (
 ) VALUES (
     nextval('m_attribute_sq'), v_client_id, 0, 'Y', now(), 100, now(), 100,
     'Mat_Type', 'R', 'N', 'N',
-    18, v_reference_id, uuid_generate_v4()
+    18, v_reference_id, generate_uuid()
 );
 ```
 
@@ -232,7 +232,7 @@ INSERT INTO m_attributeset (
     name, description, isinstanceattribute, m_attributeset_uu
 ) VALUES (
     v_attributeset_id, v_client_id, 0, 'Y', now(), 100, now(), 100,
-    'Tile', 'Product attributes for tiles', 'N', uuid_generate_v4()
+    'Tile', 'Product attributes for tiles', 'N', generate_uuid()
 );
 -- m_attributeset_type defaults to MMS
 ```
@@ -249,7 +249,7 @@ INSERT INTO m_attributeuse (
 ) VALUES (
     v_attributeset_id, v_attribute_id,
     v_client_id, 0, 'Y', now(), 100, now(), 100,
-    10, uuid_generate_v4()
+    10, generate_uuid()
 );
 -- seqno = 10 determines display order (ascending)
 ```

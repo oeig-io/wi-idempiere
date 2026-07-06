@@ -100,7 +100,7 @@ BEGIN
             ) VALUES (
                 v_tree_id, v_org_id, v_client_id, 0, 'Y',
                 now(), 100, now(), 100,
-                v_parent_id, rec.seqno, gen_random_uuid()
+                v_parent_id, rec.seqno, generate_uuid()
             );
         END IF;
     END LOOP;

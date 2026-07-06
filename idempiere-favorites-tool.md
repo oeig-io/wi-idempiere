@@ -54,7 +54,7 @@ INSERT INTO ad_tree_favorite (
 )
 VALUES (
     nextval('ad_tree_favorite_sq'), 0, 0, 'Y', now(), 100, now(), 100,
-    <user_id>, uuid_generate_v4()
+    <user_id>, generate_uuid()
 );
 ```
 
@@ -119,7 +119,7 @@ BEGIN
             nextval('ad_tree_favorite_node_sq'),
             v_favorite_id, v_client_id, 0,
             v_menu_id, 'Y', 'Y', 'N', 'Y',
-            now(), 100, now(), 100, '', 0, uuid_generate_v4()
+            now(), 100, now(), 100, '', 0, generate_uuid()
         )
         ON CONFLICT DO NOTHING;
     END LOOP;
@@ -143,7 +143,7 @@ VALUES (
     nextval('ad_tree_favorite_node_sq'),
     <favorite_id>, <client_id>, 0,
     NULL, 'Y', 'Y', 'Y', 'Y',  -- issummary = 'Y' for folder
-    now(), 100, now(), 100, 'Folder Name', 0, uuid_generate_v4()
+    now(), 100, now(), 100, 'Folder Name', 0, generate_uuid()
 )
 RETURNING ad_tree_favorite_node_id;
 ```
@@ -160,7 +160,7 @@ VALUES (
     nextval('ad_tree_favorite_node_sq'),
     <favorite_id>, <client_id>, 0,
     <menu_id>, 'Y', 'Y', 'N', 'Y',  -- issummary = 'N' for menu item
-    now(), 100, now(), 100, '', <seqno>, <folder_node_id>, uuid_generate_v4()
+    now(), 100, now(), 100, '', <seqno>, <folder_node_id>, generate_uuid()
 );
 ```
 
@@ -190,7 +190,7 @@ BEGIN
     VALUES (
         nextval('ad_tree_favorite_node_sq'), v_favorite_id, v_client_id, 0,
         NULL, 'Y', 'Y', 'Y', 'Y',
-        now(), 100, now(), 100, 'Transactions', 0, uuid_generate_v4()
+        now(), 100, now(), 100, 'Transactions', 0, generate_uuid()
     )
     RETURNING ad_tree_favorite_node_id INTO v_folder_id;
 
@@ -203,7 +203,7 @@ BEGIN
     VALUES (
         nextval('ad_tree_favorite_node_sq'), v_favorite_id, v_client_id, 0,
         129, 'Y', 'Y', 'N', 'Y',
-        now(), 100, now(), 100, '', 10, v_folder_id, uuid_generate_v4()
+        now(), 100, now(), 100, '', 10, v_folder_id, generate_uuid()
     );
 
     -- Add Purchase Order to folder
@@ -215,7 +215,7 @@ BEGIN
     VALUES (
         nextval('ad_tree_favorite_node_sq'), v_favorite_id, v_client_id, 0,
         205, 'Y', 'Y', 'N', 'Y',
-        now(), 100, now(), 100, '', 20, v_folder_id, uuid_generate_v4()
+        now(), 100, now(), 100, '', 20, v_folder_id, generate_uuid()
     );
 END $$;
 ```

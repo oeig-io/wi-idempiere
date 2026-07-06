@@ -160,17 +160,17 @@ END $$;
 
 ## UUID Generation
 
-Never hardcode UUID strings. Use `gen_random_uuid()`:
+Never hardcode UUID strings. Use iDempiere's own `generate_uuid()`:
 
 ```sql
 INSERT INTO some_table (
     some_table_uu, ...
 ) VALUES (
-    gen_random_uuid(), ...
+    generate_uuid(), ...
 );
 ```
 
-> 📝 **Note** - The first deploy script uses `adempiere.uuid_generate_v4()` with schema prefix because it runs in a pre-native-sequence context. All later scripts use `gen_random_uuid()` without schema prefix.
+`generate_uuid()` is the standard for every table's `_uu` column. It is defined by iDempiere on every supported database, so scripts stay portable (no dependence on a PostgreSQL extension), and it returns a time-ordered UUIDv7 consistent with the framework's own records. Prefer it over `gen_random_uuid()` or `uuid_generate_v4()`.
 
 ## Organization ID
 
@@ -331,7 +331,7 @@ BEGIN
         v_record_id, v_client_id, 0, 'Y',
         now(), 100, now(), 100,
         'My Record', ...,
-        gen_random_uuid()
+        generate_uuid()
     );
 
     RAISE NOTICE 'Created record: %', v_record_id;
@@ -345,7 +345,7 @@ END $$;
 | `ad_client_id = 11` | `ad_client_id = v_client_id` (looked up from `${CLIENT_NAME}`) |
 | `ad_role_id = 1000001` | Looked up from `'${CLIENT_NAME} Admin'` |
 | `pa_documentstatus_id = 200016` | `nextval('pa_documentstatus_sq')` |
-| `pa_documentstatus_uu = '6a7c...'` | `gen_random_uuid()` |
+| `pa_documentstatus_uu = '6a7c...'` | `generate_uuid()` |
 | `ON CONFLICT (hardcoded_id)` | `IF v_existing IS NULL THEN INSERT` |
 | `ad_user_id = 0` (when meaning NULL) | `ad_user_id = NULL` |
 | `WHERE name = 'ANS'` | `WHERE name = '${CLIENT_NAME}'` |

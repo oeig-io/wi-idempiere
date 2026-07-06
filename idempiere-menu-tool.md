@@ -94,7 +94,7 @@ BEGIN
         NULL, -- ad_infowindow_id
         'U',  -- entitytype = User maintained
         'N',  -- iscentrallymaintained
-        uuid_generate_v4()
+        generate_uuid()
     );
 
     RAISE NOTICE 'Created AD_Menu (ID: %)', v_menu_id;
@@ -119,7 +119,7 @@ BEGIN
         now(), 100, now(), 100,
         0,     -- parent_id = 0 (root level) or specific parent menu ID
         999,   -- seqno = 999 (append at end)
-        uuid_generate_v4()
+        generate_uuid()
     );
 
     RAISE NOTICE 'Added to menu tree %', v_tree_id;
@@ -134,10 +134,25 @@ END $$;
 
 | Column | Value | Notes |
 |--------|-------|-------|
-| action | 'P' | Process (use 'W' for Window, 'F' for Form, etc.) |
-| ad_process_id | process ID | Links to AD_Process |
+| action | single-letter code | Selects the target type (Process, Window, Info Window, Report, ...). Read the codes from the DB — see [Action Codes](#action-codes). |
+| link column | target ID | Set the column that matches the action: `ad_process_id` (Process), `ad_window_id` (Window), `ad_infowindow_id` (Info Window), `ad_form_id` (Form), etc. |
 | issummary | 'N' | 'Y' for folder/menu group, 'N' for leaf item |
 | issotrx | 'Y'/'N' | 'Y' for sales-side menus, 'N' for purchasing-side |
+
+#### Action Codes
+
+`AD_Menu.Action` is a list reference. Do not memorize or hardcode the letters — the labels are counter-intuitive (`F` is WorkFlow, `X` is Form, `I` is Info Window). Read the current value/label pairs from a sample environment (e.g. `id-01`):
+
+```sql
+SELECT rl.value, rl.name
+FROM ad_ref_list rl
+JOIN ad_column c ON c.ad_reference_value_id = rl.ad_reference_id
+WHERE c.ad_table_id = (SELECT ad_table_id FROM ad_table WHERE tablename = 'AD_Menu')
+  AND c.columnname = 'Action'
+ORDER BY rl.value;
+```
+
+Then set the link column that matches the chosen action (e.g. an Info Window menu uses action `I` with `ad_infowindow_id`).
 
 **AD_TreeNodeMM:**
 
@@ -250,7 +265,7 @@ BEGIN
         'Storage Fee Allocation',
         'Creates invoices for sales orders with unshipped reserved quantities',
         'N', 'Y', 'N', 'P', v_process_id,
-        NULL, NULL, NULL, NULL, NULL, NULL, 'U', 'N', uuid_generate_v4()
+        NULL, NULL, NULL, NULL, NULL, NULL, 'U', 'N', generate_uuid()
     );
 
     INSERT INTO ad_treenodeMM (
@@ -259,7 +274,7 @@ BEGIN
         parent_id, seqno, ad_treenodeMM_uu
     ) VALUES (
         v_tree_id, v_menu_id, 0, 0, 'Y', now(), 100, now(), 100,
-        0, 999, uuid_generate_v4()
+        0, 999, generate_uuid()
     );
 END $$;
 ```

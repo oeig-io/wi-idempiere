@@ -113,7 +113,7 @@ INSERT INTO ad_reference (
     updated, updatedby, name, validationtype, entitytype, ad_reference_uu
 )
 SELECT nextval('ad_reference_sq'), 0, 0, 'Y', now(), 100, now(), 100,
-    'TableName', 'T', 'U', gen_random_uuid()
+    'TableName', 'T', 'U', generate_uuid()
 WHERE NOT EXISTS (SELECT 1 FROM ad_reference WHERE name = 'TableName' AND validationtype = 'T');
 
 -- Step 2: Create AD_Ref_Table (maps to actual table - NO ID COLUMN!)
@@ -131,7 +131,7 @@ SELECT
     NULL,  -- Optional filter (e.g., 'IsSummary=''Y''')
     'Value',  -- Order by column
     'U',
-    gen_random_uuid()
+    generate_uuid()
 WHERE NOT EXISTS (SELECT 1 FROM ad_ref_table WHERE ad_reference_id = (SELECT ad_reference_id FROM ad_reference WHERE name = 'TableName' AND validationtype = 'T'));
 ```
 
@@ -244,7 +244,7 @@ INSERT INTO ad_reference (
     updated, updatedby, name, validationtype, entitytype, ad_reference_uu
 )
 SELECT nextval('ad_reference_sq'), 0, 0, 'Y', now(), 100, now(), 100,
-    'TableName', 'T', 'U', gen_random_uuid()
+    'TableName', 'T', 'U', generate_uuid()
 WHERE NOT EXISTS (SELECT 1 FROM ad_reference WHERE name = 'TableName' AND validationtype = 'T');
 ```
 
@@ -264,7 +264,7 @@ SELECT
     NULL,  -- Optional filter (e.g., 'IsSummary=''Y''')
     'Value',  -- Order by column
     'U',
-    gen_random_uuid()
+    generate_uuid()
 WHERE NOT EXISTS (SELECT 1 FROM ad_ref_table WHERE ad_reference_id = (SELECT ad_reference_id FROM ad_reference WHERE name = 'TableName' AND validationtype = 'T'));
 ```
 
@@ -307,7 +307,7 @@ SELECT nextval('ad_val_rule_sq'), 0, 0, 'Y', now(), 100, now(), 100,
     'S',  -- SQL type
     'ColumnName=@ColumnName@',
     'U',
-    gen_random_uuid()
+    generate_uuid()
 WHERE NOT EXISTS (SELECT 1 FROM ad_val_rule WHERE name = 'Rule Name');
 ```
 
@@ -587,7 +587,7 @@ INSERT INTO ad_element (
 SELECT nextval('ad_element_sq'), 0, 0, 'Y', now(), 100, now(), 100,
     'ACME_Mat_Category_ID', 'Category', 'Category',
     'Material category reference',
-    'U', uuid_generate_v4()
+    'U', generate_uuid()
 WHERE NOT EXISTS (
     SELECT 1 FROM ad_element WHERE columnname = 'ACME_Mat_Category_ID'
 )
@@ -619,7 +619,7 @@ SELECT nextval('ad_column_sq'), 0, 0, 'Y', now(), 100, now(), 100,
     'N', 'N', 'N',
     (SELECT ad_element_id FROM ad_element WHERE columnname = 'ACME_Mat_Category_ID'),
     'N', 'N', 'N', 'Y', 'Y', 'N', 'N', 'N', 'N', 'N',
-    uuid_generate_v4()
+    generate_uuid()
 WHERE NOT EXISTS (
     SELECT 1 FROM ad_column
     WHERE columnname = 'ACME_Mat_Category_ID'
@@ -672,7 +672,7 @@ SELECT nextval('ad_field_sq'), 0, 0, 'Y', now(), 100, now(), 100,
      WHERE columnname = 'ACME_Mat_Category_ID'
        AND ad_table_id = (SELECT ad_table_id FROM ad_table WHERE tablename = 'ACME_Mat_Type')),
     'Y', 10, 'N', 60, 'N', 'N', 'N', 'U',
-    uuid_generate_v4(), 'Y', 'N', 2
+    generate_uuid(), 'Y', 'N', 2
 WHERE NOT EXISTS (
     SELECT 1 FROM ad_field f
     JOIN ad_column c ON f.ad_column_id = c.ad_column_id
@@ -733,6 +733,8 @@ Boolean Column Rules:
 - Must be IsMandatory: true with DefaultValue: 'N'
 - Field layout: xposition = 2, columnspan = 1 for proper checkbox display
 - Always set SeqNoGrid to match or follow SeqNo for grid view column order
+
+> 📝 **Note** - Set `IsAllowCopy='N'` on columns holding record state (status, approval, posted/processed flags) so copying a record does not carry its state forward.
 
 ## Post-Creation
 
