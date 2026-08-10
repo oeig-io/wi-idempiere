@@ -1,34 +1,23 @@
 # iDempiere Enhancement
 
-Work instructions for planning and executing iDempiere changes.
+The purpose of this repo is to hold the work instructions for planning and executing iDempiere changes — configuring a tenant through the Application Dictionary, writing the Groovy and SQL artifacts that carry a change, and moving that change between environments.
 
-## Work Instructions
+It matters because iDempiere is unforgiving about *where* a rule belongs: one requirement can be a callout, a model validator, or a process, and choosing wrong is expensive to undo. This README routes a need to the instruction that owns it; the skills themselves hold the detail.
 
-### Roles
+## Discovering
 
-- [idempiere-system-admin-role.md](idempiere-system-admin-role.md) - tenant configuration and go-live data
+The rest of this repo is self-describing — ask it rather than reading a list here:
 
-### Tasks
+```bash
+ls *-tool.md                            # what tools this repo holds
+rg -N '^description:' *-tool.md         # what each one is for
+rg -l 'AD_InfoWindow' *-tool.md         # which tool covers a given AD table
+```
 
-- [idempiere-environment-management-task.md](idempiere-environment-management-task.md) - incus environment workflow
-- [idempiere-feature-configuration-task.md](idempiere-feature-configuration-task.md) - creating and testing configuration artifacts
+## Related Documentation
 
-### Tools
+- Standards for these documents: `../wi-base/WORK_INSTRUCTIONS.md`
+- Host-level Incus infrastructure (storage pools, networks, profiles): `wi-incus`
+- OEIG-specific iDempiere vocabulary and production database access: `wi-idempiere-oeig`
 
-- [idempiere-application-dictionary-tool.md](idempiere-application-dictionary-tool.md) - AD foundations: standard patterns, button columns, reference types
-  - [idempiere-pre-minted-uuid-tool.md](idempiere-pre-minted-uuid-tool.md) - pre-mint UUIDs for stable cross-script entity references
-  - [idempiere-table-create-tool.md](idempiere-table-create-tool.md) - creating new tables via UI
-  - [idempiere-column-create-tool.md](idempiere-column-create-tool.md) - adding columns to existing tables (UI and SQL)
-  - [idempiere-callout-tool.md](idempiere-callout-tool.md) - Groovy callouts (AD_Rule, AD_Column.Callout) - UI field change events
-  - [idempiere-model-validator-tool.md](idempiere-model-validator-tool.md) - Groovy model validators (AD_Rule, AD_Table_ScriptValidator) - save events
-  - [idempiere-process-tool.md](idempiere-process-tool.md) - Groovy processes (AD_Rule, AD_Process)
-  - [idempiere-info-window-tool.md](idempiere-info-window-tool.md) - Info Windows (AD_InfoWindow, AD_InfoColumn)
-- [idempiere-tree-maintenance-tool.md](idempiere-tree-maintenance-tool.md) - maintain hierarchy trees (AD_Tree, AD_TreeNode); organization tree placement and summary flags
-- [idempiere-deploy-sql-tool.md](idempiere-deploy-sql-tool.md) - conventions for portable SQL deploy scripts (variable substitution, dynamic lookups, .sql vs .sh)
-- [idempiere-code-validator-tool.md](idempiere-code-validator-tool.md) - audit Groovy/SQL for resource leaks and conventions
-- [idempiere-pull-request-tool.md](idempiere-pull-request-tool.md) - checklist and workflow for submitting PRs to iDempiere core
-- [idempiere-packout-tool.md](idempiere-packout-tool.md) - PackOut (2Pack) export records for portable artifact packaging
-- [idempiere-rest-api-tool.md](idempiere-rest-api-tool.md) - REST API patterns for authentication, CRUD, processes
-- [idempiere-language-tool.md](idempiere-language-tool.md) - manage UI languages and auto-populate translation (_trl) records (Language Maintenance); fix gaps that break Copy Tab Fields
-- [postgresql-logging-tool.md](postgresql-logging-tool.md) - PostgreSQL query logging for debugging iDempiere
-- [ssh-remote-connection-tool.md](ssh-remote-connection-tool.md) - SSH key creation and remote access
+Tags: #idempiere #application-dictionary #groovy #deploy
