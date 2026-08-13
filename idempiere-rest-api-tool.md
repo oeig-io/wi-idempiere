@@ -1,5 +1,5 @@
 ---
-name: idempiere-rest-api
+name: idempiere-rest-api-tool
 description: REST API patterns for authentication, CRUD operations, nested record creation, process execution, and query filtering in iDempiere
 compatibility: opencode
 metadata:

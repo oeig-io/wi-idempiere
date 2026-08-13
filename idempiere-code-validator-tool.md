@@ -1,5 +1,5 @@
 ---
-name: idempiere-code-validator
+name: idempiere-code-validator-tool
 description: Audit Groovy and SQL code for resource leaks, connection management issues, and coding conventions before iDempiere deployment
 compatibility: opencode
 metadata:

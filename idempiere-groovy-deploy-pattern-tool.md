@@ -1,5 +1,5 @@
 ---
-name: idempiere-groovy-deploy-pattern
+name: idempiere-groovy-deploy-pattern-tool
 description: Standard pattern for deploying Groovy scripts to iDempiere AD_Rule using .sh deploy scripts with temp files for reliable escaping
 compatibility: opencode
 metadata:

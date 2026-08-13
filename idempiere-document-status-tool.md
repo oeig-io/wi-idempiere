@@ -1,5 +1,5 @@
 ---
-name: idempiere-document-status
+name: idempiere-document-status-tool
 description: Configure home page Activities widget indicators using PA_DocumentStatus for counting records and linking to windows, forms, processes, or info windows
 compatibility: opencode
 metadata:

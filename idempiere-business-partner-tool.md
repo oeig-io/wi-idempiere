@@ -1,5 +1,5 @@
 ---
-name: idempiere-business-partner
+name: idempiere-business-partner-tool
 description: Creating and managing business partners, contacts, and login users in iDempiere with proper org assignments and role management
 compatibility: opencode
 metadata:

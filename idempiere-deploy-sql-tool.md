@@ -1,5 +1,5 @@
 ---
-name: idempiere-deploy-sql
+name: idempiere-deploy-sql-tool
 description: Conventions and patterns for writing SQL deploy scripts that are portable across iDempiere environments via deploy.sh variable substitution and dynamic lookups
 compatibility: opencode
 metadata:

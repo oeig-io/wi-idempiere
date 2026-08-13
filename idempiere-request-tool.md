@@ -1,5 +1,5 @@
 ---
-name: idempiere-request
+name: idempiere-request-tool
 description: Configure and use the Request system in iDempiere including request types, status categories, resolutions, and workflow management
 compatibility: opencode
 metadata:

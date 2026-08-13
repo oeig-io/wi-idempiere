@@ -1,5 +1,5 @@
 ---
-name: idempiere-favorites
+name: idempiere-favorites-tool
 description: Programmatic management of iDempiere user favorites including menu items, folders, and hierarchical organization via AD_Tree_Favorite and AD_Tree_Favorite_Node tables
 compatibility: opencode
 metadata:

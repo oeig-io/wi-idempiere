@@ -1,5 +1,5 @@
 ---
-name: idempiere-window
+name: idempiere-window-tool
 description: Configure iDempiere windows, tabs, and field layouts using AD_Window, AD_Tab, and AD_Field tables with modern positioning controls
 compatibility: opencode
 metadata:

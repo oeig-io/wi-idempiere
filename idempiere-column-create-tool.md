@@ -1,5 +1,5 @@
 ---
-name: idempiere-column-create
+name: idempiere-column-create-tool
 description: Add columns to existing iDempiere tables using the REST API including AD_Column creation and database synchronization
 compatibility: opencode
 metadata:

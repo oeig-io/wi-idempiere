@@ -1,5 +1,5 @@
 ---
-name: idempiere-sales-tax
+name: idempiere-sales-tax-tool
 description: Sales tax rate lookup using SalesTaxZip API for iDempiere transactions
 compatibility: opencode
 metadata:

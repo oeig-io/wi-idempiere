@@ -1,5 +1,5 @@
 ---
-name: idempiere-accounting-valid-combination
+name: idempiere-accounting-valid-combination-tool
 description: Understanding and creating GL account valid combinations for charges, products, business partners, and other entities in iDempiere
 compatibility: opencode
 metadata:

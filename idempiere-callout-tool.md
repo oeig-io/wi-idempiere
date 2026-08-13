@@ -1,5 +1,5 @@
 ---
-name: idempiere-callout
+name: idempiere-callout-tool
 description: Groovy callouts for UI field change events in iDempiere including AD_Rule creation and AD_Column.Callout configuration
 compatibility: opencode
 metadata:

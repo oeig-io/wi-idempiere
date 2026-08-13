@@ -1,5 +1,5 @@
 ---
-name: postgresql-logging
+name: postgresql-logging-tool
 description: Enable and use PostgreSQL query logging to debug iDempiere issues including dynamic SQL analysis and query logic troubleshooting
 compatibility: opencode
 metadata:

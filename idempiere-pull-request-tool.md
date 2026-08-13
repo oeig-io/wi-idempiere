@@ -1,5 +1,5 @@
 ---
-name: idempiere-pull-request
+name: idempiere-pull-request-tool
 description: Checklist and workflow for submitting high-quality pull requests to the iDempiere core
 compatibility: opencode
 metadata:

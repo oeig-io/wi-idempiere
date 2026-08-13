@@ -1,5 +1,5 @@
 ---
-name: idempiere-language
+name: idempiere-language-tool
 description: Manage iDempiere UI languages and auto-populate translation (_trl) records with the Language Maintenance process, and resolve translation gaps that break Copy Tab Fields and other _trl operations
 compatibility: opencode
 metadata:

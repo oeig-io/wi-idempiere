@@ -1,5 +1,5 @@
 ---
-name: idempiere-report-execution
+name: idempiere-report-execution-tool
 description: Run iDempiere reports and print documents via REST API and visually verify output by converting PDF to images
 compatibility: opencode
 metadata:

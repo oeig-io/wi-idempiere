@@ -1,5 +1,5 @@
 ---
-name: idempiere-pre-minted-uuid
+name: idempiere-pre-minted-uuid-tool
 description: Pre-mint UUIDs at authoring time for stable cross-script entity references in iDempiere deploy scripts and Groovy code
 compatibility: opencode
 metadata:

@@ -1,5 +1,5 @@
 ---
-name: idempiere-build
+name: idempiere-build-tool
 description: hints for building a special instance of idempiere like how iDempiere builds with Jenkins
 type: tool
 purpose: document how to build iDempiere from source

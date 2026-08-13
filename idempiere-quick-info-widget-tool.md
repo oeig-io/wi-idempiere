@@ -1,5 +1,5 @@
 ---
-name: idempiere-quick-info-widget
+name: idempiere-quick-info-widget-tool
 description: Configure the Quick Info Widget for contextual information display in the right-side help panel using AD_Message, AD_StatusLine, and AD_StatusLineUsedIn
 compatibility: opencode
 metadata:

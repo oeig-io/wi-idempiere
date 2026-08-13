@@ -1,5 +1,5 @@
 ---
-name: idempiere-tree-maintenance
+name: idempiere-tree-maintenance-tool
 description: Maintain iDempiere hierarchy trees (organization, and other element trees) via AD_Tree and the tree-node tables, including node placement, summary flags, and idempotent deploy patterns
 compatibility: opencode
 metadata:

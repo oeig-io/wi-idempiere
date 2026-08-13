@@ -1,5 +1,5 @@
 ---
-name: idempiere-menu
+name: idempiere-menu-tool
 description: Menu creation and management patterns for iDempiere including AD_Menu entries, tree node placement, and role visibility considerations
 compatibility: opencode
 metadata:

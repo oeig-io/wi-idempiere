@@ -1,5 +1,5 @@
 ---
-name: idempiere-process
+name: idempiere-process-tool
 description: Groovy processes implementation patterns for iDempiere including AD_Rule creation and AD_Process configuration with parameters
 compatibility: opencode
 metadata:

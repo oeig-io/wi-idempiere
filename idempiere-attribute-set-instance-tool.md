@@ -1,5 +1,5 @@
 ---
-name: idempiere-attribute-set-instance
+name: idempiere-attribute-set-instance-tool
 description: Create and manage attribute sets in iDempiere for tracking product and inventory characteristics
 compatibility: opencode
 metadata:

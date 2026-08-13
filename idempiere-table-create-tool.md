@@ -1,5 +1,5 @@
 ---
-name: idempiere-table-create
+name: idempiere-table-create-tool
 description: Create new tables in iDempiere using the REST API including AD_Table record creation, table completion, and window generation
 compatibility: opencode
 metadata:

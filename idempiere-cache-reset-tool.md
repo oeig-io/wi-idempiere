@@ -1,5 +1,5 @@
 ---
-name: idempiere-cache-reset
+name: idempiere-cache-reset-tool
 description: Reset iDempiere application cache to reflect configuration changes without service restart
 compatibility: opencode
 metadata:

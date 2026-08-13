@@ -1,5 +1,5 @@
 ---
-name: idempiere-model-validator
+name: idempiere-model-validator-tool
 description: Groovy model validators for save events in iDempiere using Table Script Validator including AD_Rule and AD_Table_ScriptValidator configuration
 compatibility: opencode
 metadata:

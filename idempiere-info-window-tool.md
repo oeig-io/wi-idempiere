@@ -1,5 +1,5 @@
 ---
-name: idempiere-info-window
+name: idempiere-info-window-tool
 description: Info Windows configuration for iDempiere including AD_InfoWindow and AD_InfoColumn setup with filtering and process button integration
 compatibility: opencode
 metadata:

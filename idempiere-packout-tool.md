@@ -1,5 +1,5 @@
 ---
-name: idempiere-packout
+name: idempiere-packout-tool
 description: PackOut (2Pack) export workflow for creating portable XML packages in iDempiere for configuration migration between environments
 compatibility: opencode
 metadata:
